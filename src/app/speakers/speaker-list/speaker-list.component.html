@@ -8,13 +8,13 @@
     <div class="text-center" *ngIf="isLoggedIn() && isAdmin()">
       <button type="button" class="btn btn-success" routerLink="/speakers/new">Create Speaker</button>
     </div>
-    <div class="row text-center" *ngIf="(speakers$ | async)?.length !== 0 && speakers$ | async as speakers">
-      <div *ngFor="let speaker of speakers" class="col-lg-3 col-md-6 mb-r" style="padding-left: 40px; padding-right: 40px; padding-bottom: 50px; margin: 0 auto;">
+    <div class="row text-center" *ngIf="(speakers | async)?.length !== 0 && speakers | async as speakers">
+      <div *ngFor="let speaker of (speakers | async)" class="col-lg-3 col-md-6 mb-r" style="padding-left: 40px; padding-right: 40px; padding-bottom: 50px; margin: 0 auto;">
         <div class="avatar show-modal" (click)="showModal(speaker)" title="{{ speaker.name }}" alt="{{ speaker.name }}">
           <img *ngIf="!speaker.photoURL" class="rounded-circle z-depth-1" style="background-image: url('../../../assets/img/user-default.png')">
           <img *ngIf="speaker.photoURL" class="rounded-circle z-depth-1" [ngStyle]="{'background-image': 'url(' + speaker.photoURL + ')'}">
         </div>
-        <button type="button" class="btn btn-sm btn-primary" *ngIf="isLoggedIn() && isAdmin()" routerLink="/speakers/{{ speaker.$key }}/edit">
+        <button type="button" class="btn btn-sm btn-primary" *ngIf="isLoggedIn() && isAdmin()" routerLink="/speakers/{{ speaker.key }}/edit">
           <i class="fa fa-pencil" aria-hidden="true"></i>
         </button>
         <button type="button" class="btn btn-sm btn-danger" *ngIf="isLoggedIn() && isAdmin()" (click)="deleteSpeaker(speaker)">
@@ -49,7 +49,7 @@
         </a>
       </div>
     </div>
-    <div class="text-center" *ngIf="(speakers$ | async)?.length === 0">
+    <div class="text-center" *ngIf="(speakers | async)?.length === 0">
       <h5>Stay tuned! Speakers are being added soon!</h5>
     </div>
   </section>

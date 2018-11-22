@@ -56,7 +56,7 @@
   <section class="mb-4" *ngIf="session?.speakers">
     <!--Author box-->
     <div class="author-box" *ngFor="let speaker$ of profiles">
-      <div class="row" *ngIf="speaker$ | async as speaker">
+      <div class="row" *ngIf="speaker | async as speaker">
         <!--Avatar-->
         <div class="avatar col-xs-12 col-sm-3" title="{{ speaker.name }}" alt="{{ speaker.name }}">
           <img *ngIf="!speaker.photoURL" class="img-fluid rounded-circle z-depth-2" style="background-image: url('../../assets/img/user-default.png')">

@@ -19,7 +19,7 @@ import { Observable } from 'rxjs/Rx';
 export class SessionDetailComponent implements OnInit {
   session: Session = new Session();
   profiles: any[];
-  siteConfig$: Observable<SiteConfig>;
+  siteConfig: Observable<SiteConfig>;
   eventName: string;
   mySchedule: AngularFireObject<any>;
 
@@ -35,15 +35,15 @@ export class SessionDetailComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.siteConfig$ = this.siteConfigService.getConfig$();
+    this.siteConfig = this.siteConfigService.getConfig();
 
-    this.siteConfig$.subscribe(siteConfig => {
+    this.siteConfig.subscribe(siteConfig => {
       this.eventName = siteConfig.eventName;
     });
 
     this.activatedRouter.params.subscribe((params) => {
       const id = params['id'];
-      this.sessionService.getSession$(id).subscribe(session => {
+      this.sessionService.getSession(id).subscribe(session => {
         this.session = session;
         this.getSpeakerDetails(session.speakers);
         // dynamically set page titles
@@ -55,7 +55,7 @@ export class SessionDetailComponent implements OnInit {
           pageTitle += ' :: ' + this.session.title;
         }
         this.title.setTitle(pageTitle);
-        this.mySchedule = this.scheduleService.getScheduleSession(this.authService.userId, this.session.$key);
+        this.mySchedule = this.scheduleService.getScheduleSession(this.authService.userId, this.session.key);
       });
     });
   }
@@ -83,19 +83,19 @@ export class SessionDetailComponent implements OnInit {
   }
 
   editDetails(session) {
-    this.router.navigate([`/sessions/${session.$key}/edit`]);
+    this.router.navigate([`/sessions/${session.key}/edit`]);
   }
 
   delete(session) {
     if (window.confirm('Are you sure you want to delete this session?')) {
-      this.sessionService.deleteSession(session.$key);
+      this.sessionService.deleteSession(session.key);
       this.router.navigate(['/sessions']);
     }
   }
 
   addToSchedule() {
     this.mySchedule.set({
-      id: this.session.$key,
+      id: this.session.key,
       title: this.session.title,
       time: this.session.time,
       tag: this.session.tag ? this.session.tag : null,
@@ -112,7 +112,7 @@ export class SessionDetailComponent implements OnInit {
 
   openFeedback(session) {
     if ((this.isLoggedIn())) {
-      this.router.navigate([`/sessions/${session.$key}/survey`]);
+      this.router.navigate([`/sessions/${session.key}/survey`]);
     }
   }
 

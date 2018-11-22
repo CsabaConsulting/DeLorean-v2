@@ -11,7 +11,7 @@ import { Observable } from 'rxjs/Rx';
   styleUrls: ['./top-menu.component.scss']
 })
 export class TopMenuComponent implements OnInit {
-  siteConfig$: Observable<SiteConfig>;
+  siteConfig: Observable<SiteConfig>;
 
   constructor(
     private authService: AuthService,
@@ -20,7 +20,7 @@ export class TopMenuComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.siteConfig$ = this.siteConfigService.getConfig$();
+    this.siteConfig = this.siteConfigService.getConfig();
   }
 
   userLogin() {

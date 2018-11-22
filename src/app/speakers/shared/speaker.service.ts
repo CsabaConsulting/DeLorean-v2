@@ -3,7 +3,7 @@ import { Speaker } from './speaker';
 import { firebaseConfig } from './../../../environments/firebase.config';
 import { AngularFireDatabase, AngularFireList, AngularFireObject, QueryFn } from '@angular/fire/database';
 import { Observable } from 'rxjs/Rx';
-
+import { map } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
 import 'firebase/storage';
 
@@ -18,13 +18,17 @@ export class SpeakerService {
     this.firebaseStorage = firebase.storage();
   }
 
-  getSpeakerListCore(queryFn?: QueryFn): AngularFireList<Speaker> {
+  getSpeakerList(queryFn?: QueryFn): Observable<Speaker[]> {
     this.speakers = this.db.list(this.basePath, queryFn);
-    return this.speakers;
-  }
-
-  getSpeakerList$(queryFn?: QueryFn): Observable<Speaker[]> {
-    return this.getSpeakerListCore().valueChanges();
+    return this.speakers.snapshotChanges().pipe(
+      map(changes => {
+        return changes.map(speaker => {
+          const data = speaker.payload.val() as Speaker;
+          data.key = speaker.payload.key;
+          return data;
+        });
+      })
+    );
   }
 
   getSpeakerCore(key: string): AngularFireObject<Speaker> {
@@ -61,13 +65,13 @@ export class SpeakerService {
 
   updateSpeaker(speaker: Speaker, file?: File): void {
     if (file !== undefined && file !== null) {
-      this.firebaseStorage.ref(this.basePath + `/${speaker.$key}`).put(file)
+      this.firebaseStorage.ref(this.basePath + `/${speaker.key}`).put(file)
         .then(snapshot => {
           speaker.photoURL = snapshot.downloadURL;
-          this.db.object(this.basePath + `/${speaker.$key}`).update(speaker);
+          this.db.object(this.basePath + `/${speaker.key}`).update(speaker);
         });
     } else {
-      this.db.object(this.basePath + `/${speaker.$key}`).update(speaker);
+      this.db.object(this.basePath + `/${speaker.key}`).update(speaker);
     }
   }
 

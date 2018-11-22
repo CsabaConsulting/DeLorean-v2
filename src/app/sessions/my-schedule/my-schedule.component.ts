@@ -15,9 +15,9 @@ import { Observable } from 'rxjs/Rx';
   styleUrls: ['./my-schedule.component.scss']
 })
 export class MyScheduleComponent implements OnInit {
-  public sessions$: Observable<Session[]>;
-  public sections$: Observable<Section[]>;
-  public mySessions$: Observable<any[]>;
+  public sessions: Observable<Session[]>;
+  public sections: Observable<Section[]>;
+  public mySessions: Observable<any[]>;
 
   constructor(
     private sessionService: SessionService,
@@ -29,13 +29,13 @@ export class MyScheduleComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.sessions$ = this.sessionService.getSessionList$();
-    this.sections$ = this.sectionService.getSectionList$();
-    this.mySessions$ = this.scheduleService.getScheduleList$(this.authService.userId);
+    this.sessions = this.sessionService.getSessionList();
+    this.sections = this.sectionService.getSectionList();
+    this.mySessions = this.scheduleService.getScheduleList(this.authService.userId);
   }
 
   openDetails(session) {
-    this.router.navigate([`/sessions/${session.$key}`]);
+    this.router.navigate([`/sessions/${session.key}`]);
   }
 
   getSpeakerName(speakerKey) {

@@ -3,6 +3,7 @@ import { AngularFireList, AngularFireDatabase, QueryFn } from '@angular/fire/dat
 import { firebaseConfig } from './../../../environments/firebase.config';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class LevelService {
@@ -11,13 +12,17 @@ export class LevelService {
 
   constructor(private db: AngularFireDatabase) { }
 
-  getLevelListCore(queryFn?: QueryFn): AngularFireList<Level> {
+  getLevelList(queryFn?: QueryFn): Observable<Level[]> {
     this.levels = this.db.list(this.basePath, queryFn);
-    return this.levels;
-  }
-
-  getLevelList$(queryFn?: QueryFn): Observable<Level[]> {
-    return this.getLevelListCore().valueChanges();
+    return this.levels.snapshotChanges().pipe(
+      map(changes => {
+        return changes.map(level => {
+          const data = level.payload.val() as Level;
+          data.key = level.payload.key;
+          return data;
+        });
+      })
+    );
   }
 
   createLevel(level: Level): void {

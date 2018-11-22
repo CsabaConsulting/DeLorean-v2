@@ -1,7 +1,7 @@
 import * as firebase from 'firebase/app';
 
 export class Sponsor {
-  $key: string;
+  key: string;
   name: string;
   websiteLink: string;
   logoURL: File;

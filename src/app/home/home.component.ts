@@ -17,11 +17,11 @@ import { Observable } from 'rxjs/Rx';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  speakers$: Observable<Speaker[]>;
-  siteConfig$: Observable<SiteConfig>;
-  sponsors$: Observable<Sponsor[]>;
-  levels$: Observable<Level[]>;
-  tickets$: Observable<Ticket[]>;
+  speakers: Observable<Speaker[]>;
+  siteConfig: Observable<SiteConfig>;
+  sponsors: Observable<Sponsor[]>;
+  levels: Observable<Level[]>;
+  tickets: Observable<Ticket[]>;
   styles: any[];
 
   constructor(
@@ -33,15 +33,15 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.speakers$ = this.speakerService.getSpeakerList$(ref => ref.orderByChild('featured').equalTo(true));
+    this.speakers = this.speakerService.getSpeakerList(ref => ref.orderByChild('featured').equalTo(true));
 
     // Default colors for Ticket Types
     this.styles = ['cyan', 'blue', 'indigo', 'deep-purple'];
 
-    this.siteConfig$ = this.siteConfigService.getConfig$();
-    this.sponsors$ = this.sponsorService.getSponsorList$(ref => ref.orderByChild('level'));
-    this.levels$ = this.levelService.getLevelList$(ref => ref.orderByChild('rank'));
-    this.tickets$ = this.ticketService.getTicketList$(ref => ref.orderByChild('active').equalTo(true));
+    this.siteConfig = this.siteConfigService.getConfig();
+    this.sponsors = this.sponsorService.getSponsorList(ref => ref.orderByChild('level'));
+    this.levels = this.levelService.getLevelList(ref => ref.orderByChild('rank'));
+    this.tickets = this.ticketService.getTicketList(ref => ref.orderByChild('active').equalTo(true));
   }
 
 }

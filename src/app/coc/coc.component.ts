@@ -9,14 +9,14 @@ import { Observable } from 'rxjs/Rx';
   styleUrls: ['./coc.component.scss']
 })
 export class CocComponent implements OnInit {
-  siteConfig$: Observable<SiteConfig>;
+  siteConfig: Observable<SiteConfig>;
 
   constructor(
     private siteConfigService: SiteConfigService
   ) { }
 
   ngOnInit() {
-    this.siteConfig$ = this.siteConfigService.getConfig$();
+    this.siteConfig = this.siteConfigService.getConfig();
   }
 
 }

@@ -1,7 +1,7 @@
 import * as firebase from 'firebase/app';
 
 export class Ticket {
-  $key: string;
+  key: string;
   name: string;
   price: number;
   description1: string;

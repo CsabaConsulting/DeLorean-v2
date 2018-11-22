@@ -13,7 +13,7 @@ import { Observable } from 'rxjs/Rx';
   providers: [ModalDirective, DatePipe]
 })
 export class SurveysComponent implements OnInit {
-  public sessions$: Observable<Session[]>;
+  public sessions: Observable<Session[]>;
   public surveyDetail: any;
   surveyData: any[] = [];
 
@@ -22,7 +22,7 @@ export class SurveysComponent implements OnInit {
   constructor(private sessionService: SessionService) { }
 
   ngOnInit() {
-    this.sessions$ = this.sessionService.getSessionList$();
+    this.sessions = this.sessionService.getSessionList();
   }
 
   showModal(session, survey) {
@@ -102,7 +102,7 @@ export class SurveysComponent implements OnInit {
   downloadCSV(args) {
     let data, filename, link;
     let csv = this.convertDataToCSV({
-        data: this.sessions$
+        data: this.sessions
     });
 
     if (csv == null) {

@@ -9,12 +9,12 @@ import { Observable } from 'rxjs/Rx';
   styleUrls: ['./ticket-list.component.scss']
 })
 export class TicketListComponent implements OnInit {
-  tickets$: Observable<Ticket[]>;
+  tickets: Observable<Ticket[]>;
 
   constructor(private ticketService: TicketService) { }
 
   ngOnInit() {
-    this.tickets$ = this.ticketService.getTicketList$();
+    this.tickets = this.ticketService.getTicketList();
   }
 
   delete(key: string) {

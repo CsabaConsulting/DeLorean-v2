@@ -14,7 +14,7 @@ import { Observable } from 'rxjs/Rx';
 })
 export class SponsorNewComponent implements OnInit {
   sponsor: Sponsor = new Sponsor();
-  public levels$: Observable<Level[]>;
+  public levels: Observable<Level[]>;
 
   constructor(
     private sponsorService: SponsorService,
@@ -24,7 +24,7 @@ export class SponsorNewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.levels$ = this.levelService.getLevelList$(ref => ref.orderByChild('rank'));
+    this.levels = this.levelService.getLevelList(ref => ref.orderByChild('rank'));
   }
 
   save() {

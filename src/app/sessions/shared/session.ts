@@ -1,7 +1,7 @@
 import * as firebase from 'firebase/app';
 
 export class Session {
-  $key: string;
+  key: string;
   title: string;
   room: string;
   time: string;

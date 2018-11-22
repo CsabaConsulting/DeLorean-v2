@@ -14,7 +14,7 @@ import { Observable } from 'rxjs/Rx';
 export class SpeakerListComponent implements OnInit {
   @ViewChild('speakerModal') public speakerModal: ModalDirective;
 
-  public speakers$: Observable<Speaker[]>;
+  public speakers: Observable<Speaker[]>;
   public speakerDetail: any;
 
   constructor(
@@ -24,7 +24,7 @@ export class SpeakerListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.speakers$ = this.speakerService.getSpeakerList$(ref => ref.orderByChild('name'));
+    this.speakers = this.speakerService.getSpeakerList(ref => ref.orderByChild('name'));
   }
 
   isLoggedIn() {
@@ -37,7 +37,7 @@ export class SpeakerListComponent implements OnInit {
 
   deleteSpeaker(speaker) {
     if (window.confirm('Are you sure you want to delete this speaker?')) {
-      this.speakerService.deleteSpeaker(speaker.$key);
+      this.speakerService.deleteSpeaker(speaker.key);
     }
   }
 

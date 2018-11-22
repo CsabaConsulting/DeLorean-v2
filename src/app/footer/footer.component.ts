@@ -9,13 +9,13 @@ import { Observable } from 'rxjs/Rx';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-  siteConfig$: Observable<SiteConfig>;
+  siteConfig: Observable<SiteConfig>;
   copyright = new Date().getFullYear();
 
   constructor(private siteConfigService: SiteConfigService) { }
 
   ngOnInit() {
-    this.siteConfig$ = this.siteConfigService.getConfig$();
+    this.siteConfig = this.siteConfigService.getConfig();
   }
 
 }

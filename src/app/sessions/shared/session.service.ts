@@ -4,6 +4,7 @@ import { firebaseConfig } from './../../../environments/firebase.config';
 import { AngularFireDatabase, AngularFireList, AngularFireObject, QueryFn } from '@angular/fire/database';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class SessionService {
@@ -13,23 +14,23 @@ export class SessionService {
 
   constructor(private db: AngularFireDatabase) { }
 
-  getSessionListCore(queryFn?: QueryFn): AngularFireList<Session> {
+  getSessionList(queryFn?: QueryFn): Observable<Session[]> {
     this.sessions = this.db.list(this.basePath, queryFn);
-    return this.sessions;
+    return this.sessions.snapshotChanges().pipe(
+      map(changes => {
+        return changes.map(session => {
+          const data = session.payload.val() as Session;
+          data.key = session.payload.key;
+          return data;
+        });
+      })
+    );
   }
 
-  getSessionList$(queryFn?: QueryFn): Observable<Session[]> {
-    return this.getSessionListCore(queryFn).valueChanges();
-  }
-
-  getSessionCore(key: string): AngularFireObject<Session> {
+  getSession(key: string): Observable<Session> {
     const path = `${this.basePath}/${key}`;
     this.session = this.db.object(path);
-    return this.session;
-  }
-
-  getSession$(key: string): Observable<Session> {
-    return this.getSessionCore(key).valueChanges();
+    return this.session.valueChanges();
   }
 
   createSession(session: Session): void {

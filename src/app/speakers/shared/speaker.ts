@@ -1,7 +1,7 @@
 import * as firebase from 'firebase/app';
 
 export class Speaker {
-  $key: string;
+  key: string;
   name: string;
   title: string;
   company: string;

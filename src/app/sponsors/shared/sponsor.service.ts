@@ -3,6 +3,7 @@ import { AngularFireList, AngularFireDatabase, AngularFireObject, QueryFn } from
 import { firebaseConfig } from './../../../environments/firebase.config';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
+import { map } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
 import 'firebase/storage';
 
@@ -17,13 +18,17 @@ export class SponsorService {
     this.firebaseStorage = firebase.storage();
   }
 
-  getSponsorListCore(queryFn?: QueryFn): AngularFireList<Sponsor> {
+  getSponsorList(queryFn?: QueryFn): Observable<Sponsor[]> {
     this.sponsors = this.db.list(this.basePath, queryFn);
-    return this.sponsors;
-  }
-
-  getSponsorList$(queryFn?: QueryFn): Observable<Sponsor[]> {
-    return this.getSponsorListCore(queryFn).valueChanges();
+    return this.sponsors.snapshotChanges().pipe(
+        map(changes => {
+          return changes.map(sponsor => {
+            const data = sponsor.payload.val() as Sponsor;
+            data.key = sponsor.payload.key;
+            return data;
+          });
+        })
+      );
   }
 
   getSponsor(key: string): AngularFireObject<Sponsor> {
@@ -45,13 +50,13 @@ export class SponsorService {
 
   updateSponsor(sponsor: Sponsor, file?: File): void {
     if (file !== undefined && file !== null) {
-      this.firebaseStorage.ref(this.basePath + `/${sponsor.$key}`).put(file)
+      this.firebaseStorage.ref(this.basePath + `/${sponsor.key}`).put(file)
         .then(snapshot => {
           sponsor.logoURL = snapshot.downloadURL;
-          this.db.object(this.basePath + `/${sponsor.$key}`).update(sponsor);
+          this.db.object(this.basePath + `/${sponsor.key}`).update(sponsor);
         });
     } else {
-      this.db.object(this.basePath + `/${sponsor.$key}`).update(sponsor);
+      this.db.object(this.basePath + `/${sponsor.key}`).update(sponsor);
     }
   }
 

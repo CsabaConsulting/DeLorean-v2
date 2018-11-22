@@ -3,6 +3,7 @@ import { AngularFireList, AngularFireObject, AngularFireDatabase, QueryFn } from
 import { firebaseConfig } from './../../../../environments/firebase.config';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class TicketService {
@@ -12,13 +13,17 @@ export class TicketService {
 
   constructor(private db: AngularFireDatabase) { }
 
-  getTicketListCore(queryFn?: QueryFn): AngularFireList<Ticket> {
+  getTicketList(queryFn?: QueryFn): Observable<Ticket[]> {
     this.tickets = this.db.list(this.basePath, queryFn);
-    return this.tickets;
-  }
-
-  getTicketList$(queryFn?: QueryFn): Observable<Ticket[]> {
-    return this.getTicketListCore().valueChanges();
+    return this.tickets.snapshotChanges().pipe(
+      map(changes => {
+        return changes.map(ticket => {
+          const data = ticket.payload.val() as Ticket;
+          data.key = ticket.payload.key;
+          return data;
+        });
+      })
+    );
   }
 
   getTicket(key: string): AngularFireObject<Ticket> {

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { firebaseConfig } from './../../../environments/firebase.config';
 import { AngularFireDatabase, AngularFireList, QueryFn } from '@angular/fire/database';
 import { Observable } from 'rxjs/Rx';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class SectionService {
@@ -10,13 +11,17 @@ export class SectionService {
 
   constructor(private db: AngularFireDatabase) { }
 
-  getSectionListCore(queryFn?: QueryFn, year?: string|number): AngularFireList<Section> {
+  getSectionList(queryFn?: QueryFn, year?: string|number): Observable<Section[]> {
     this.sections = this.listPath(queryFn, year);
-    return this.sections;
-  }
-
-  getSectionList$(queryFn?: QueryFn, year?: string|number): Observable<Section[]> {
-    return this.getSectionListCore(queryFn, year).valueChanges();
+    return this.sections.snapshotChanges().pipe(
+      map(changes => {
+        return changes.map(section => {
+          const data = section.payload.val() as Section;
+          data.key = section.payload.key;
+          return data;
+        });
+      })
+    );
   }
 
   createSection(section: Section): void {

@@ -15,8 +15,8 @@ import { Observable } from 'rxjs/Rx';
 })
 export class SessionNewComponent implements OnInit {
   session: Session = new Session();
-  public sections$: Observable<Section[]>;
-  public speakers$: Observable<Speaker[]>;
+  public sections: Observable<Section[]>;
+  public speakers: Observable<Speaker[]>;
 
   constructor(
     private sessionService: SessionService,
@@ -26,8 +26,8 @@ export class SessionNewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.sections$ = this.sectionService.getSectionList$();
-    this.speakers$ = this.speakerService.getSpeakerList$(ref => ref.orderByChild('name'));
+    this.sections = this.sectionService.getSectionList();
+    this.speakers = this.speakerService.getSpeakerList(ref => ref.orderByChild('name'));
   }
 
   save() {

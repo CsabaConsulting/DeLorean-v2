@@ -16,8 +16,8 @@ import { Observable } from 'rxjs/Rx';
   providers: [ModalDirective]
 })
 export class SessionListComponent implements OnInit {
-  public sessions$: Observable<Session[]>;
-  public sections$: Observable<Section[]>;
+  public sessions: Observable<Session[]>;
+  public sections: Observable<Section[]>;
   section: Section = new Section();
 
   @ViewChild('sectionModal') public sectionModal: ModalDirective;
@@ -31,8 +31,8 @@ export class SessionListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.sessions$ = this.sessionService.getSessionList$();
-    this.sections$ = this.sectionService.getSectionList$();
+    this.sessions = this.sessionService.getSessionList();
+    this.sections = this.sectionService.getSectionList();
   }
 
   isLoggedIn() {
@@ -45,7 +45,7 @@ export class SessionListComponent implements OnInit {
 
   openDetails(session) {
     if ((this.isLoggedIn() && this.isAdmin()) || session.abstract) {
-      this.router.navigate([`/sessions/${session.$key}`]);
+      this.router.navigate([`/sessions/${session.key}`]);
     }
   }
 
@@ -58,7 +58,7 @@ export class SessionListComponent implements OnInit {
 
   deleteSection(section) {
     if (window.confirm('Are you sure you want to delete this section? This WILL orphan any sessions tied to it!')) {
-      this.sectionService.deleteSection(section.$key);
+      this.sectionService.deleteSection(section.key);
     }
   }
 

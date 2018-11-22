@@ -18,14 +18,14 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let ticket of (tickets$ | async); let i = index;">
+            <tr *ngFor="let ticket of (tickets | async); let i = index;">
               <th class="text-center">{{ i+1 }}</th>
               <td>{{ ticket.name }}</td>
               <td>{{ ticket.price | currency:'USD':true }}</td>
               <td>{{ ticket.active }}</td>
               <td>
-                <a class="btn btn-sm btn-primary" routerLink="/admin/tickets/{{ ticket.$key }}/edit"><i class="fa fa-edit"></i> Edit</a>
-                <a class="btn btn-sm btn-danger" (click)="delete(ticket.$key)"><i class="fa fa-trash"></i> Delete</a>
+                <a class="btn btn-sm btn-primary" routerLink="/admin/tickets/{{ ticket.key }}/edit"><i class="fa fa-edit"></i> Edit</a>
+                <a class="btn btn-sm btn-danger" (click)="delete(ticket.key)"><i class="fa fa-trash"></i> Delete</a>
               </td>
             </tr>
           </tbody>

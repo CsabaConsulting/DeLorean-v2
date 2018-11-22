@@ -17,10 +17,10 @@ import { Observable } from 'rxjs/Rx';
   providers: [ModalDirective]
 })
 export class SponsorListComponent implements OnInit {
-  public sponsors$: Observable<Sponsor[]>;
-  public levels$: Observable<Level[]>;
+  public sponsors: Observable<Sponsor[]>;
+  public levels: Observable<Level[]>;
   level: Level = new Level();
-  siteConfig$: Observable<SiteConfig>;
+  siteConfig: Observable<SiteConfig>;
 
   @ViewChild('levelModal') public levelModal: ModalDirective;
 
@@ -33,9 +33,9 @@ export class SponsorListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.sponsors$ = this.sponsorService.getSponsorList$(ref => ref.orderByChild('level'));
-    this.levels$ = this.levelService.getLevelList$(ref => ref.orderByChild('rank'));
-    this.siteConfig$ = this.siteConfigService.getConfig$();
+    this.sponsors = this.sponsorService.getSponsorList(ref => ref.orderByChild('level'));
+    this.levels = this.levelService.getLevelList(ref => ref.orderByChild('rank'));
+    this.siteConfig = this.siteConfigService.getConfig();
   }
 
   isLoggedIn() {
@@ -55,13 +55,13 @@ export class SponsorListComponent implements OnInit {
 
   deleteLevel(level) {
     if (window.confirm('Are you sure you want to delete this level? This WILL orphan any sponsors tied to it!')) {
-      this.levelService.deleteLevel(level.$key);
+      this.levelService.deleteLevel(level.key);
     }
   }
 
   deleteSponsor(sponsor) {
     if (window.confirm('Are you sure you want to delete this sponsor?')) {
-      this.sponsorService.deleteSponsor(sponsor.$key);
+      this.sponsorService.deleteSponsor(sponsor.key);
     }
   }
 

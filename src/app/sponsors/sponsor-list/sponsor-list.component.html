@@ -12,9 +12,9 @@
     </div>
     <div class="col sponsors">
       <h4>We partner with some of the<br/>world's most innovative brands.</h4>
-      <a class="btn btn-primary waves-light" [href]="(siteConfig$ | async)?.sponsorURL" target="_blank" rel="noopener">Become a Sponsor</a>
+      <a class="btn btn-primary waves-light" [href]="(siteConfig | async)?.sponsorURL" target="_blank" rel="noopener">Become a Sponsor</a>
     </div>
-    <div class="col sponsors" *ngFor="let level of (levels$ | async)">
+    <div class="col sponsors" *ngFor="let level of (levels | async)">
       <h3 style="font-weight: bold;">
         {{ level.name }}
         <button class="btn-sm btn-danger" *ngIf="isLoggedIn() && isAdmin()" (click)="deleteLevel(level)">
@@ -24,13 +24,13 @@
       <hr style="width: 60%;" />
       <br/>
       <div class="row">
-        <ng-container *ngFor="let sponsor of (sponsors$ | async)">
-          <ng-container *ngIf="level.$key === sponsor.level">
+        <ng-container *ngFor="let sponsor of (sponsors | async)">
+          <ng-container *ngIf="level.key === sponsor.level">
             <span class="col-md-6" style="padding: 20px 40px; margin: 0 auto;">
               <a [href]="sponsor.websiteLink" target="_blank" rel="noopener">
                 <img [src]="sponsor.logoURL" class="sponsor-img" title="{{ sponsor.name }}" alt="{{ sponsor.name }}" />
               </a>
-              <button class="btn-sm btn-primary" *ngIf="isLoggedIn() && isAdmin()" routerLink="/sponsors/{{ sponsor.$key }}/edit">
+              <button class="btn-sm btn-primary" *ngIf="isLoggedIn() && isAdmin()" routerLink="/sponsors/{{ sponsor.key }}/edit">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
               </button>
               <button class="btn-sm btn-danger" *ngIf="isLoggedIn() && isAdmin()" (click)="deleteSponsor(sponsor)">

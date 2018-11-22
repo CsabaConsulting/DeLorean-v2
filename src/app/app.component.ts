@@ -14,7 +14,7 @@ import { mergeMap, map, filter } from 'rxjs/operators';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  siteConfig$: Observable<SiteConfig>;
+  siteConfig: Observable<SiteConfig>;
   eventName: string;
 
   constructor(
@@ -25,9 +25,9 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.siteConfig$ = this.siteConfigService.getConfig$();
+    this.siteConfig = this.siteConfigService.getConfig();
 
-    this.siteConfig$.subscribe(siteConfig => {
+    this.siteConfig.subscribe(siteConfig => {
       this.eventName = siteConfig.eventName;
     });
 

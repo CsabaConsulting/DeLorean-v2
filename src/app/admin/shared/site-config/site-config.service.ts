@@ -24,7 +24,7 @@ export class SiteConfigService {
     return this.siteConfig;
   }
 
-  getConfig$(): Observable<SiteConfig> {
+  getConfig(): Observable<SiteConfig> {
     return this.getConfigCore().valueChanges();
   }
 

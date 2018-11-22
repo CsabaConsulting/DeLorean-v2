@@ -14,8 +14,8 @@ import { Observable } from 'rxjs/Rx';
   styleUrls: ['./session-edit.component.scss']
 })
 export class SessionEditComponent implements OnInit {
-  public sections$: Observable<Section[]>;
-  public speakers$: Observable<Speaker[]>;
+  public sections: Observable<Section[]>;
+  public speakers: Observable<Speaker[]>;
   session: Session = new Session();
   activeKey: string;
 
@@ -30,13 +30,13 @@ export class SessionEditComponent implements OnInit {
   ngOnInit() {
     this.activatedRouter.params.subscribe((params) => {
       this.activeKey = params['id'];
-      this.sessionService.getSession$(this.activeKey).subscribe(session => {
+      this.sessionService.getSession(this.activeKey).subscribe(session => {
         this.session = session;
       });
     });
 
-    this.sections$ = this.sectionService.getSectionList$();
-    this.speakers$ = this.speakerService.getSpeakerList$(ref => ref.orderByChild('name'));
+    this.sections = this.sectionService.getSectionList();
+    this.speakers = this.speakerService.getSpeakerList(ref => ref.orderByChild('name'));
   }
 
   updateSession() {

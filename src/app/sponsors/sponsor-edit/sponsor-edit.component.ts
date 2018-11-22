@@ -13,7 +13,7 @@ import { Observable } from 'rxjs/Rx';
 })
 export class SponsorEditComponent implements OnInit {
   sponsor: Sponsor = new Sponsor();
-  public levels$: Observable<Level[]>;
+  public levels: Observable<Level[]>;
   activeKey: string;
 
   constructor(
@@ -31,7 +31,7 @@ export class SponsorEditComponent implements OnInit {
       });
     });
 
-    this.levels$ = this.levelService.getLevelList$(ref => ref.orderByChild('rank'));
+    this.levels = this.levelService.getLevelList(ref => ref.orderByChild('rank'));
   }
 
   update() {
